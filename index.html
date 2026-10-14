@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Now to year-end, then 2027 · Team Call Oct 14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1F33; --ink-soft:#4A4F66; --paper:#FBF8F3; --paper-deep:#F3EDE3; --card:#FFFFFF;
+    --blue:#2853D2; --blue-soft:#E4EAFB; --amber:#E8A33D; --amber-soft:#FBF0DC; --amber-ink:#9A6A15;
+    --green:#2E9E6B; --green-soft:#E2F3EB; --red:#C4472F; --red-soft:#F9E4DF;
+    --navy:#141830; --navy-ink:#F5EFE4; --navy-soft:#B9BDD4; --radius:18px;
+    --font:"Manrope",-apple-system,"Segoe UI",system-ui,Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:var(--font);background:var(--paper);color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:5vh 6vw;background:var(--paper);overflow:hidden}
+  .slide::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(60vw 60vh at 100% 0%,rgba(232,163,61,.14),transparent 60%),radial-gradient(50vw 50vh at 0% 100%,rgba(40,83,210,.10),transparent 60%)}
+  .slide.dark::before{background:radial-gradient(60vw 60vh at 100% 0%,rgba(232,163,61,.16),transparent 60%),radial-gradient(50vw 50vh at 0% 100%,rgba(40,83,210,.28),transparent 60%)}
+  .slide>*{position:relative;z-index:1}
+  .slide.active{display:flex;animation:in .45s ease}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .slide.dark{background:var(--navy);color:var(--navy-ink)}
+  #progress{position:fixed;top:0;left:0;height:5px;background:var(--blue);width:0%;z-index:50;transition:width .35s ease}
+  #counter{position:fixed;bottom:18px;left:24px;font-size:13px;font-weight:600;letter-spacing:.08em;color:var(--ink-soft);z-index:50;font-variant-numeric:tabular-nums}
+  #hint{position:fixed;bottom:18px;right:24px;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink-soft);opacity:.55;z-index:50}
+  .frag{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+  .frag.on{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){.frag{transition:none;transform:none}#progress{transition:none}.slide.active{animation:none}}
+
+  .eyebrow{font-size:clamp(12px,1.1vw,16px);font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:1.4vh}
+  .dark .eyebrow{color:var(--amber)}
+  h1{font-size:clamp(40px,6vw,88px);font-weight:800;line-height:1.02;letter-spacing:-0.03em;text-wrap:balance}
+  h2{font-size:clamp(26px,3.2vw,50px);font-weight:800;line-height:1.08;letter-spacing:-0.025em;text-wrap:balance;max-width:24em}
+  .sub{font-size:clamp(16px,1.6vw,24px);color:var(--ink-soft);margin-top:2.2vh;max-width:36em;line-height:1.5}
+  .dark .sub{color:var(--navy-soft)}
+  .punch{font-size:clamp(17px,1.9vw,28px);font-weight:800;letter-spacing:-0.015em;margin-top:2.2vh;line-height:1.3;max-width:36em}
+  .punch .hl{color:var(--blue)}
+  .dark .punch .hl{color:var(--amber)}
+  .src{font-size:12.5px;color:var(--ink-soft);opacity:.75;margin-top:1.2vh;letter-spacing:.02em}
+  .dark .src{color:#9BA0BC}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:0 2px 6px rgba(27,31,51,.06),0 10px 26px rgba(27,31,51,.07)}
+  .ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em}
+  .k{font-size:clamp(11.5px,1vw,14px);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+  .k.amber{color:var(--amber-ink)} .k.green{color:var(--green)} .k.soft{color:var(--ink-soft)}
+
+  /* title */
+  .title-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:3vw;align-items:center}
+  .stars{display:flex;gap:.6vw;margin-top:3vh}
+  .stars .ic{width:clamp(22px,2.6vw,40px);height:clamp(22px,2.6vw,40px);stroke-width:1.6;color:var(--paper-deep);stroke:#D9D1C4}
+  .stars .ic.on{color:var(--amber);fill:var(--amber);stroke:var(--amber)}
+  .stars-cap{font-size:clamp(12px,1.05vw,15px);font-weight:700;color:var(--ink-soft);margin-top:1vh;letter-spacing:.04em}
+  .title-stats{display:grid;gap:1.2vh}
+  .ts{padding:1.3vw 1.5vw;display:flex;align-items:center;gap:1.2vw}
+  .ts .n{font-size:clamp(34px,4vw,60px);font-weight:800;letter-spacing:-0.04em;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums;min-width:2.3em;text-align:right}
+  .ts .n.amber{color:var(--amber)} .ts .n.green{color:var(--green)}
+  .ts .t{font-size:clamp(13px,1.2vw,17px);font-weight:700;line-height:1.3}
+  .ts .t small{display:block;font-weight:600;color:var(--ink-soft);font-size:.86em;margin-top:.2em}
+
+  /* stepper (arc) */
+  .stepper{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:1.4vw;margin-top:4vh}
+  .stepper::before{content:"";position:absolute;left:4%;right:4%;top:calc(2.9vw + 1px);height:4px;background:var(--paper-deep);border-radius:2px}
+  .step{position:relative;text-align:left;padding-right:1vw}
+  .step .dot{width:5.8vw;height:5.8vw;max-width:84px;max-height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card);box-shadow:0 2px 6px rgba(27,31,51,.06),0 10px 26px rgba(27,31,51,.09);color:var(--blue);border:4px solid var(--paper)}
+  .step .dot .ic{width:45%;height:45%;stroke-width:1.9}
+  .step.done .dot{color:var(--green)} .step.now .dot{color:var(--amber-ink);background:var(--amber-soft);box-shadow:0 0 0 6px rgba(232,163,61,.25),0 10px 26px rgba(27,31,51,.09)} .step.soft .dot{color:var(--ink-soft)}
+  .step .k{margin-top:1.6vh}
+  .step h3{font-size:clamp(17px,1.8vw,27px);font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin:.5vh 0 .6vh}
+  .step p{font-size:clamp(12.5px,1.15vw,16.5px);color:var(--ink-soft);line-height:1.45}
+
+  /* two-column mock layouts */
+  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:2.4vw;margin-top:2.6vh;align-items:center}
+  .moments{display:grid;gap:1.2vh}
+  .mo{display:flex;gap:1vw;align-items:flex-start;padding:1.1vw 1.3vw}
+  .mo .ib{flex:0 0 auto;width:2.8vw;height:2.8vw;min-width:38px;min-height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--blue-soft);color:var(--blue)}
+  .mo .ib .ic{width:55%;height:55%}
+  .mo.amber .ib{background:var(--amber-soft);color:var(--amber-ink)} .mo.green .ib{background:var(--green-soft);color:var(--green)}
+  .mo h3{font-size:clamp(15px,1.5vw,22px);font-weight:800;letter-spacing:-0.015em;line-height:1.2}
+  .mo p{font-size:clamp(12.5px,1.12vw,16px);color:var(--ink-soft);line-height:1.4;margin-top:.3vh}
+  .avs{display:flex;flex-wrap:wrap;gap:.35vw;margin-top:.9vh;align-items:center}
+  .avs .av{display:inline-flex;align-items:center;gap:.4em;font-size:clamp(10.5px,.92vw,13px);font-weight:700;color:var(--ink);background:var(--paper);border-radius:999px;padding:.14em .65em .14em .14em;border:1px solid rgba(27,31,51,.07)}
+  .avs .av i{width:1.75em;height:1.75em;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;color:#fff;font-size:.92em;flex:0 0 auto}
+  .avs .tag{font-size:clamp(9.5px,.82vw,11.5px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);opacity:.7;margin-left:.2vw}
+  .mi .avs{margin-top:.9vh;gap:.6vw .9vw}
+  .avs .gp{display:inline-flex;align-items:center;gap:.45em;font-size:clamp(10.5px,.9vw,12.5px);font-weight:700;color:var(--ink-soft)}
+  .avs .stack{display:inline-flex}
+  .avs .stack i{width:1.9em;height:1.9em;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;color:#fff;font-size:.9em;border:2px solid #fff;margin-left:-.55em;box-shadow:0 1px 2px rgba(27,31,51,.15)}
+  .avs .stack i:first-child{margin-left:0}
+  .mo .who{font-size:clamp(10.5px,.9vw,12.5px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-top:.5vh;opacity:.8}
+
+  /* app mock */
+  .mock{border-radius:22px;padding:1.5vw;background:var(--card);box-shadow:0 2px 6px rgba(27,31,51,.06),0 18px 40px rgba(27,31,51,.12);border:1px solid rgba(27,31,51,.06);position:relative}
+  .mock .bar{display:flex;gap:6px;margin-bottom:1.2vh}
+  .mock .bar i{width:10px;height:10px;border-radius:50%;background:var(--paper-deep);display:block}
+  .mock .crumb{font-size:clamp(10.5px,.9vw,12.5px);font-weight:700;color:var(--ink-soft);letter-spacing:.04em}
+  .mock h4{font-size:clamp(16px,1.6vw,24px);font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-top:.6vh}
+  .mock .ok{display:inline-flex;align-items:center;gap:.4em;margin-top:1vh;font-size:clamp(12px,1.05vw,15px);font-weight:800;color:var(--green);background:var(--green-soft);padding:.3em .7em;border-radius:999px}
+  .mock .rows{margin-top:1.2vh;display:grid;gap:.7vh}
+  .mock .row{display:flex;justify-content:space-between;gap:1vw;font-size:clamp(12px,1.08vw,15.5px);padding:.6vh 0;border-top:1px solid var(--paper-deep)}
+  .mock .row b{font-weight:800}
+  .mock .row span{color:var(--ink-soft)}
+  .mock .prog{height:8px;border-radius:4px;background:var(--paper-deep);margin-top:1.2vh;overflow:hidden}
+  .mock .prog i{display:block;height:100%;width:12.5%;background:var(--blue);border-radius:4px}
+  .mock .btns{display:flex;gap:.7vw;margin-top:1.4vh;flex-wrap:wrap}
+  .mock .btn{font-size:clamp(12px,1.05vw,15px);font-weight:800;padding:.55em 1em;border-radius:10px;background:var(--blue);color:#fff;display:inline-flex;align-items:center;gap:.45em}
+  .mock .btn.ghost{background:var(--paper-deep);color:var(--ink)}
+  .mock .btn.amber{background:var(--amber);color:var(--ink)}
+  .mock .lbl{position:absolute;top:-1.2vh;right:1.4vw;font-size:clamp(10.5px,.9vw,12.5px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;background:var(--amber);color:var(--ink);padding:.3em .7em;border-radius:999px}
+  .mock p.body{font-size:clamp(12.5px,1.12vw,16px);color:var(--ink-soft);line-height:1.45;margin-top:.8vh}
+
+  /* stat tiles */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin-top:2.4vh}
+  .stats.two{grid-template-columns:1fr 1fr}
+  .stat{padding:1.2vw 1.4vw}
+  .stat .n{font-size:clamp(30px,3.6vw,54px);font-weight:800;letter-spacing:-0.035em;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums}
+  .stat .n.bad{color:var(--red)} .stat .n.good{color:var(--green)} .stat .n.amber{color:var(--amber)}
+  .stat .n small{font-size:.42em;letter-spacing:-0.01em;color:var(--ink);font-weight:800;margin-left:.15em}
+  .stat .l{font-size:clamp(13px,1.15vw,17px);font-weight:800;margin-top:.8vh;line-height:1.3}
+  .stat .d{font-size:clamp(11.5px,1vw,14px);color:var(--ink-soft);margin-top:.4vh;line-height:1.4}
+
+  /* chips */
+  .chips{display:flex;flex-wrap:wrap;gap:.5vw;margin-top:.8vh}
+  .chips span{font-size:clamp(12px,1.02vw,14.5px);line-height:1.3;padding:.35em .7em;border-radius:999px;background:var(--card);color:var(--ink);border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 3px rgba(27,31,51,.05)}
+  .chips span.me{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .grp{padding:1.1vw 1.3vw;border-left:6px solid var(--blue)}
+  .grp.amber{border-left-color:var(--amber)}
+  .grp .who{font-size:clamp(11px,.95vw,13.5px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-top:.2vh}
+  .grps{display:grid;gap:1.2vh;margin-top:2.2vh}
+  .hyp{margin-top:2vh;padding:1vw 1.2vw;border-radius:12px;background:var(--blue-soft)}
+  .hyp .hk{font-size:clamp(11px,.95vw,13.5px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+
+  /* fork diagram */
+  .fork{margin-top:2vh;display:grid;grid-template-columns:1fr;gap:0}
+  .fork svg{width:100%;height:auto;display:block}
+  .fork .lab{font-family:var(--font);font-weight:800}
+  .fork-cols{display:grid;grid-template-columns:1fr 1fr;gap:2.4vw;margin-top:.6vh}
+  .fc{padding:1.3vw 1.6vw;border-top:6px solid var(--amber)}
+  .fc.blue{border-top-color:var(--blue)}
+  .fc h3{font-size:clamp(19px,2vw,30px);font-weight:800;letter-spacing:-0.02em;line-height:1.12}
+  .fc p{font-size:clamp(13px,1.2vw,17px);color:var(--ink-soft);line-height:1.45;margin-top:.8vh}
+  .fc .tags{display:flex;gap:.5vw;flex-wrap:wrap;margin-top:1vh}
+  .fc .tags span{font-size:clamp(11px,.95vw,13.5px);font-weight:800;padding:.3em .7em;border-radius:999px;background:var(--amber-soft);color:var(--amber-ink)}
+  .fc.blue .tags span{background:var(--blue-soft);color:var(--blue)}
+
+  .north{display:grid;grid-template-columns:auto 1fr;gap:1.8vw;align-items:center;margin-top:2vh}
+  .nstat{display:flex;align-items:center;gap:1.1vw;padding:1vw 1.4vw}
+  .nstat .n{font-size:clamp(34px,4vw,60px);font-weight:800;letter-spacing:-0.04em;line-height:1;color:var(--green);font-variant-numeric:tabular-nums}
+  .nstat .n small{font-size:.45em;letter-spacing:0;margin-left:.1em}
+  .nstat .t{font-size:clamp(13px,1.2vw,17px);font-weight:800;line-height:1.3;max-width:26em}
+  .nstat .t small{display:block;font-weight:600;color:var(--ink-soft);font-size:.86em;margin-top:.3em}
+  .quote{font-size:clamp(14px,1.35vw,20px);font-weight:600;line-height:1.4;color:var(--ink);font-style:italic;padding-left:1.4vw;border-left:5px solid var(--amber);max-width:34em}
+  .quote span{display:block;font-style:normal;font-size:clamp(11px,.95vw,13.5px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-top:.6vh}
+  /* quick-fix menu */
+  .ws{display:grid;grid-template-columns:repeat(12,1fr);gap:.9vw;margin-top:2vh}
+  .ws .c2{grid-column:span 2} .ws .c3{grid-column:span 3}
+  .wsh{grid-column:1/-1;display:flex;align-items:baseline;gap:.8vw;border-top:3px solid var(--blue);padding-top:.8vh;margin-top:.6vh}
+  .wsh.half{grid-column:span 6}
+  .wsh.p2{border-top-color:var(--amber)} .wsh.p3{border-top-color:var(--green)}
+  .wsk{font-size:clamp(13px,1.25vw,18px);font-weight:800;letter-spacing:-0.01em}
+  .wsh.p2 .wsk{color:var(--amber-ink)} .wsh.p3 .wsk{color:var(--green)} .wsh:not(.p2):not(.p3) .wsk{color:var(--blue)}
+  .wso{font-size:clamp(11px,.95vw,13.5px);font-weight:700;color:var(--ink-soft)}
+  .ws .mi{padding:.9vw 1vw 1vw}
+  .ws .c2 h3{font-size:clamp(13px,1.2vw,18px)} .ws .c2 p{font-size:clamp(11px,.92vw,13.5px)} .ws .c2 .mic{width:2.2vw;height:2.2vw;min-width:30px;min-height:30px;margin-bottom:.7vh}
+  .mi{padding:1.1vw 1.2vw 1.2vw;position:relative}
+  .mi .mic{width:2.6vw;height:2.6vw;min-width:34px;min-height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--blue-soft);color:var(--blue);margin-bottom:.9vh}
+  .mi .mic .ic{width:55%;height:55%}
+  .mi.p2 .mic{background:var(--amber-soft);color:var(--amber-ink)} .mi.p3 .mic{background:var(--green-soft);color:var(--green)}
+  .mi .pill{position:absolute;top:1.1vw;right:1.1vw;font-size:clamp(9.5px,.8vw,11.5px);font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);opacity:.75}
+  .mi h3{font-size:clamp(14.5px,1.42vw,21px);font-weight:800;letter-spacing:-0.015em;line-height:1.2;margin:0 0 .4vh}
+  .mi p{font-size:clamp(11.5px,1.02vw,14.5px);color:var(--ink-soft);line-height:1.4}
+  .mi .by{font-size:clamp(10.5px,.88vw,12.5px);font-weight:700;color:var(--ink-soft);margin-top:.6vh;letter-spacing:.04em}
+
+  /* timeline for the proof of concept */
+  .poc-head{display:grid;grid-template-columns:auto 1fr auto;gap:2vw;align-items:center;margin-top:2vh}
+  .endcap{display:flex;align-items:center;gap:.8vw;padding:.9vw 1.2vw}
+  .endcap .ib{width:3vw;height:3vw;min-width:40px;min-height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .endcap .ib .ic{width:55%;height:55%}
+  .endcap.doc .ib{background:var(--amber-soft);color:var(--amber-ink)} .endcap.pr .ib{background:var(--green-soft);color:var(--green)}
+  .endcap b{display:block;font-size:clamp(14px,1.35vw,20px);font-weight:800;letter-spacing:-0.015em;line-height:1.15}
+  .endcap small{font-size:clamp(11px,.95vw,13.5px);color:var(--ink-soft);font-weight:600}
+  .weeks{text-align:center}
+  .weeks .n{font-size:clamp(44px,5.4vw,80px);font-weight:800;letter-spacing:-0.045em;line-height:1;color:var(--blue)}
+  .weeks .l{font-size:clamp(12px,1.05vw,15px);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .tl{position:relative;margin-top:2.6vh}
+  .tl .line{position:absolute;left:0;right:0;top:1.1em;height:4px;background:var(--paper-deep);border-radius:2px}
+  .tl .steps{display:grid;grid-template-columns:repeat(6,1fr);gap:1vw;position:relative}
+  .tl .s{padding-top:2.2em;position:relative}
+  .tl .s::before{content:"";position:absolute;left:0;top:calc(1.1em - 8px);width:20px;height:20px;border-radius:50%;background:var(--blue);border:4px solid var(--paper)}
+  .tl .s.done::before{background:var(--green)} .tl .s.next::before{background:var(--amber)}
+  .tl .d{font-size:clamp(11.5px,1vw,14px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+  .tl .t{font-size:clamp(14px,1.4vw,20px);font-weight:800;letter-spacing:-0.015em;line-height:1.2;margin-top:.5vh}
+  .tl .p{font-size:clamp(12px,1.02vw,14.5px);color:var(--ink-soft);line-height:1.4;margin-top:.5vh}
+
+  /* who built what */
+  .people{display:flex;flex-wrap:wrap;gap:.7vw;margin-top:1.4vh}
+  .pp{display:flex;align-items:center;gap:.6vw;padding:.45em .9em .45em .45em;border-radius:999px;background:var(--card);box-shadow:0 1px 3px rgba(27,31,51,.06);font-size:clamp(12px,1.05vw,15px)}
+  .pp .av{width:2em;height:2em;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:var(--blue);font-size:.95em}
+  .pp .av.amber{background:var(--amber);color:var(--ink)} .pp .av.green{background:var(--green)} .pp .av.navy{background:var(--navy)} .pp .av.red{background:var(--red)}
+  .pp b{font-weight:800} .pp span{color:var(--ink-soft)}
+
+  /* loop diagram */
+  .loop{margin-top:2.4vh}
+  .loop svg{width:100%;height:auto;display:block}
+  .loop-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4vw;margin-top:-.5vh}
+  .ls h3{font-size:clamp(16px,1.65vw,25px);font-weight:800;letter-spacing:-0.02em;line-height:1.15}
+  .ls p{font-size:clamp(12.5px,1.12vw,16px);color:var(--ink-soft);line-height:1.45;margin-top:.5vh}
+
+  /* ownership */
+  .own{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5vw;margin-top:2.6vh}
+  .own .o{padding:1.5vw 1.7vw 1.6vw;display:flex;gap:1.2vw;align-items:flex-start}
+  .own .av{flex:0 0 auto;width:4.2vw;height:4.2vw;min-width:52px;min-height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(20px,2vw,30px);font-weight:800;color:#fff;background:var(--blue)}
+  .own .o.amber .av{background:var(--amber);color:var(--ink)} .own .o.green .av{background:var(--green)}
+  .own .name{font-size:clamp(20px,2.2vw,34px);font-weight:800;letter-spacing:-0.025em;line-height:1.1}
+  .own .role{font-size:clamp(11.5px,1.02vw,15px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-top:.5vh}
+  .own .o.blue .role{color:var(--blue)} .own .o.amber .role{color:var(--amber-ink)} .own .o.green .role{color:var(--green)}
+  .own p{font-size:clamp(12.5px,1.15vw,16.5px);color:var(--ink-soft);margin-top:1vh;line-height:1.45}
+  .months{margin-top:2.4vh;position:relative}
+  .months .axis{display:grid;grid-template-columns:repeat(3,1fr);border-top:4px solid var(--paper-deep);padding-top:1vh}
+  .months .axis div{font-size:clamp(11.5px,1vw,14px);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .months .mk{position:absolute;bottom:calc(100% - 7px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center}
+  .months .mk i{width:14px;height:14px;border-radius:50%;display:block;border:3px solid var(--paper)}
+  .months .mk em{display:block;width:3px;height:1.6vh;background:var(--paper-deep)}
+  .months .mk.hi em{height:5.8vh}
+  .months .mk.hi2 em{height:10vh}
+  .months .mk span{font-size:clamp(11px,.95vw,13.5px);font-weight:800;white-space:nowrap;background:var(--card);padding:.25em .6em;border-radius:999px;box-shadow:0 1px 3px rgba(27,31,51,.08)}
+  .months .mk.blue i{background:var(--blue)} .months .mk.amber i{background:var(--amber)} .months .mk.green i{background:var(--green)}
+  .months-wrap{padding-top:13vh}
+
+  /* gantt */
+  .gantt{margin-top:2.6vh;display:grid;grid-template-columns:11em 1fr;gap:0 1.2vw;align-items:center;row-gap:1.1vh}
+  .gantt .hd{grid-column:2;display:grid;grid-template-columns:repeat(4,1fr);font-size:clamp(11.5px,1vw,14px);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--paper-deep);padding-bottom:.6vh}
+  .gantt .hd div{padding-left:.4em;border-left:1px dashed rgba(27,31,51,.15)}
+  .gantt .lbl h3{font-size:clamp(15px,1.5vw,22px);font-weight:800;letter-spacing:-0.015em;line-height:1.15}
+  .gantt .lbl small{display:block;font-size:clamp(11.5px,1vw,14px);color:var(--ink-soft);font-weight:600;margin-top:.2vh}
+  .gantt .track{display:grid;grid-template-columns:repeat(8,1fr);height:clamp(40px,5.2vh,56px);position:relative}
+  .gantt .bar{border-radius:10px;display:flex;align-items:center;padding:0 1em;font-size:clamp(12px,1.08vw,15.5px);font-weight:700;color:#fff;background:var(--blue);box-shadow:0 2px 6px rgba(27,31,51,.08);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gantt .bar.amber{background:var(--amber);color:var(--ink)} .gantt .bar.green{background:var(--green)} .gantt .bar.navy{background:var(--navy)}
+  .gantt .bar.ghost{background:var(--amber-soft);color:var(--amber-ink);border:2px dashed var(--amber)}
+  .gantt .track::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),rgba(27,31,51,.12) calc(25% - 1px),rgba(27,31,51,.12) 25%);pointer-events:none}
+
+  /* asks */
+  .asks{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5vw;margin-top:2.8vh}
+  .ask{padding:1.6vw 1.7vw 1.8vw;border-top:6px solid var(--amber);background:#1D2240;color:var(--navy-ink);box-shadow:none;position:relative;overflow:hidden}
+  .ask .big{position:absolute;right:.4vw;top:-1.2vw;font-size:clamp(70px,9vw,130px);font-weight:800;letter-spacing:-0.06em;color:rgba(232,163,61,.14);line-height:1}
+  .ask .num{font-size:clamp(12px,1.05vw,15px);font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
+  .ask h3{font-size:clamp(19px,2vw,30px);font-weight:800;letter-spacing:-0.02em;margin:.8vh 0 .8vh;line-height:1.15;position:relative}
+  .ask p{font-size:clamp(13px,1.2vw,17px);color:var(--navy-soft);line-height:1.45;position:relative}
+
+  .centered{align-items:flex-start}
+  .notes{display:none}
+  body.notes-on .slide.active .notes{display:block;position:fixed;left:0;right:0;bottom:0;background:var(--navy);color:var(--navy-ink);padding:14px 24px 38px;font-size:14px;line-height:1.45;z-index:40;border-top:3px solid var(--amber);max-height:36vh;overflow:auto}
+  .notes b{color:var(--amber)}
+  a{color:inherit}
+  @media (max-width:900px){
+    .slide{padding:4vh 16px;justify-content:flex-start;overflow-y:auto}
+    .title-wrap,.stepper,.split,.stats,.stats.two,.fork-cols,.menu,.tl .steps,.loop-steps,.own,.asks{grid-template-columns:1fr}
+    .stepper::before,.tl .line{display:none}
+    .gantt{grid-template-columns:1fr}
+    .gantt .hd{grid-column:1}
+    h2{max-width:none}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></symbol>
+  <symbol id="i-branch" viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></symbol>
+  <symbol id="i-buoy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+  <symbol id="i-pr" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></symbol>
+  <symbol id="i-toggle" viewBox="0 0 24 24"><rect x="1" y="5" width="22" height="14" rx="7" ry="7"/><circle cx="16" cy="12" r="3"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></symbol>
+</svg>
+
+<div id="progress"></div>
+<div id="counter">1 / 13</div>
+<div id="hint">→ next · ← back · F fullscreen</div>
+
+<!-- 1 TITLE -->
+<section class="slide centered active">
+  <div class="title-wrap">
+    <div>
+      <div class="eyebrow">Team Call · October 14</div>
+      <h1>Now to year-end, then 2027.</h1>
+      <p class="sub">Three weeks ago we pictured the first 14 days at 11 stars. Last week we matched it to what students asked for. Today: what we ship before year-end, who ships it, and how the bigger redesign gets decided.</p>
+      <div class="stars">
+        <svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg>
+      </div>
+      <div class="stars-cap">The good ideas showed up around 7 stars. The rest is 2027.</div>
+    </div>
+    <div class="title-stats">
+      <div class="card ts"><div class="n amber">3</div><div class="t">Wednesdays on one thread<small>Sep 23 imagine it, Oct 7 check it, today decide</small></div></div>
+      <div class="card ts"><div class="n">1,131</div><div class="t">Students told us what they need<small>212 university, 919 subscription</small></div></div>
+      <div class="card ts"><div class="n green">2</div><div class="t">Tracks from here<small>Quick fixes by December. The redesign in 2027.</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 ARC -->
+<section class="slide">
+  <div class="eyebrow">The thread so far</div>
+  <h2>Imagine it, check it against students, then decide what to build.</h2>
+  <div class="stepper">
+    <div class="step done"><div class="dot"><svg class="ic"><use href="#i-star"/></svg></div><div class="k green">Sep 23 · done</div><h3>Picture 7 to 11 stars</h3><p>Five groups, three personas, the first 14 days. Every group filled a star table.</p></div>
+    <div class="step done"><div class="dot"><svg class="ic"><use href="#i-chart"/></svg></div><div class="k green">Oct 7 · done</div><h3>Check it against students</h3><p>Three problem areas from 1,131 responses. Each group wrote a problem, a fix, and a two-week test.</p></div>
+    <div class="step done"><div class="dot"><svg class="ic"><use href="#i-users"/></svg></div><div class="k green">Oct 9 · done</div><h3>Two workstreams, owners named</h3><p>Rodolfo's sync with Ops, L&amp;D and PM. Program upgrade under Priya and LaRae. Feedback under the PM team.</p></div>
+    <div class="step now"><div class="dot"><svg class="ic"><use href="#i-branch"/></svg></div><div class="k amber">Today</div><h3>Split it in two</h3><p>The upgrade through December, owned across the team. The 2027 redesign, researched first.</p></div>
+  </div>
+</section>
+
+<!-- 3 WHAT WE HEARD: SEP 23 -->
+<section class="slide">
+  <div class="eyebrow">Sep 23 · what you pictured at 7 stars</div>
+  <h2>Seven stars comes down to one thing: a real person is looking at your work.</h2>
+  <div class="split">
+    <div class="moments">
+      <div class="card mo"><div class="ib"><svg class="ic"><use href="#i-send"/></svg></div><div><h3>First submission</h3><p>A receipt, a named reviewer, a date that holds.</p><div class="avs" data-people="Christie|Scott|Vinny U"></div></div></div>
+      <div class="card mo amber"><div class="ib"><svg class="ic"><use href="#i-buoy"/></svg></div><div><h3>Hitting the first wall</h3><p>Help on the screen she's stuck on. 90 seconds, not a ticket.</p><div class="avs" data-people="Christie|Scott|Vinny U"></div></div></div>
+      <div class="card mo green"><div class="ib"><svg class="ic"><use href="#i-compass"/></svg></div><div><h3>Choosing and starting</h3><p>Six choices, a finished example, a clock that only runs while she works.</p><div class="avs" data-people="Smita|Rachael|Priya|Jay|LaRae|Michael"></div></div></div>
+    </div>
+    <div class="mock">
+      <div class="lbl">What 7 stars looks like</div>
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="crumb">Pfizer · Project 1 · Task 1 of 8</div>
+      <h4>Submission received</h4>
+      <div class="ok"><svg class="ic"><use href="#i-check"/></svg> We've got it</div>
+      <div class="rows">
+        <div class="row"><b>Reviewer</b><span>Christie M., Program Manager</span></div>
+        <div class="row"><b>Feedback by</b><span>Thursday, Oct 22</span></div>
+        <div class="row"><b>Self-check</b><span>3 of 3 before you sent it</span></div>
+      </div>
+      <div class="prog"><i></i></div>
+      <div class="crumb" style="margin-top:.6vh">Task 2 unlocks when feedback lands</div>
+      <div class="btns"><span class="btn ghost"><svg class="ic"><use href="#i-play"/></svg> Stuck on this step? 90-second walkthrough</span></div>
+    </div>
+  </div>
+  <p class="punch frag">What every group added at the bottom: <span class="hl">"They want to know a person is there, looking at their work."</span></p>
+</section>
+
+<!-- 4 WHAT WE HEARD: OCT 7 -->
+<section class="slide">
+  <div class="eyebrow">Oct 7 · what you proposed against the data</div>
+  <h2>Students named three problems. Your proposals already answer them.</h2>
+  <div class="stats">
+    <div class="card stat"><div class="n bad">100<small>of 212</small></div><div class="l">Raised content format and quality</div><div class="d">University students, unprompted</div></div>
+    <div class="card stat"><div class="n amber">62<small>of 212</small></div><div class="l">Raised clear instructions</div><div class="d">And examples of what good looks like</div></div>
+    <div class="card stat"><div class="n">59<small>of 212</small></div><div class="l">Raised human presence</div><div class="d">Someone looking at their work</div></div>
+    <div class="card stat"><div class="n good">34.3<small>%</small></div><div class="l">Submit Project 1 in week one</div><div class="d">Ex-grant. The median finisher takes 16 days.</div></div>
+  </div>
+  <div class="grps">
+    <div class="card grp amber"><div class="k amber">Answers the 62 and the 59 · instructions, and someone looking</div><div class="avs" data-people="Matt|Carlinda|Rachael|Minna|Christie|Max|Mike|Priya|Monika|LaRae"></div>
+      <div class="chips"><span>"Your Deliverable" block, day one</span><span>Tool walkthrough library</span><span>Accuracy audit, by hand then automated</span><span>Stated SLA plus a mid-project checkpoint</span><span>Rubric at submission, examples after</span><span>Lead video on professional work</span><span>Troubleshooting guide up front</span><span>Pick the format you learn best in</span></div></div>
+    <div class="card grp"><div class="k">Answers the 100 · format and load</div><div class="avs" data-people="Bifei|Michael|Smita|Scott|Begum|Jay"></div>
+      <div class="chips"><span>First days like a game, quick wins early</span><span>Short video summaries, A/B on one externship</span><span>Week one, three modules max</span><span class="me">Pick your feedback: instant AI grade or a human PM</span><span class="me">Keep working on the go: laptop, phone, audio</span></div></div>
+  </div>
+</section>
+
+<!-- 5 TWO TRACKS -->
+<section class="slide">
+  <div class="eyebrow">Where it leads</div>
+  <h2>Two tracks. Different clocks, different owners.</h2>
+  <div class="fork">
+    <svg viewBox="0 0 1200 190" aria-hidden="true">
+      <path d="M40 95 H420" stroke="#D9D1C4" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <path d="M420 95 C 560 95, 560 40, 700 40 H1160" stroke="#E8A33D" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <path d="M420 95 C 560 95, 560 150, 700 150 H1160" stroke="#2853D2" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <circle cx="40" cy="95" r="14" fill="#1B1F33"/>
+      <circle cx="420" cy="95" r="16" fill="#FBF8F3" stroke="#1B1F33" stroke-width="6"/>
+      <circle cx="1160" cy="40" r="14" fill="#E8A33D"/>
+      <circle cx="1160" cy="150" r="14" fill="#2853D2"/>
+      <text x="40" y="135" class="lab" font-size="18" fill="#4A4F66">Sep 23 · Oct 7</text>
+      <text x="420" y="135" class="lab" font-size="18" fill="#1B1F33" text-anchor="middle">Today</text>
+      <text x="760" y="22" class="lab" font-size="18" fill="#9A6A15" text-anchor="middle">Nov 2 WGU</text>
+      <text x="905" y="74" class="lab" font-size="18" fill="#9A6A15" text-anchor="middle">Nov 13 demo + feedback v1</text>
+      <text x="1065" y="22" class="lab" font-size="18" fill="#9A6A15" text-anchor="middle">Dec 11 feedback v2</text>
+      <text x="1160" y="74" class="lab" font-size="16" fill="#9A6A15" text-anchor="end">Dec 31</text>
+      <text x="810" y="184" class="lab" font-size="18" fill="#2853D2" text-anchor="middle">Nov research</text>
+      <text x="960" y="184" class="lab" font-size="18" fill="#2853D2" text-anchor="middle">Dec rank</text>
+      <text x="1160" y="184" class="lab" font-size="18" fill="#2853D2" text-anchor="end">2027 build</text>
+      <circle cx="760" cy="40" r="7" fill="#FBF8F3" stroke="#E8A33D" stroke-width="4"/>
+      <circle cx="905" cy="40" r="7" fill="#FBF8F3" stroke="#E8A33D" stroke-width="4"/>
+      <circle cx="1065" cy="40" r="7" fill="#FBF8F3" stroke="#E8A33D" stroke-width="4"/>
+      <circle cx="810" cy="150" r="7" fill="#FBF8F3" stroke="#2853D2" stroke-width="4"/>
+      <circle cx="960" cy="150" r="7" fill="#FBF8F3" stroke="#2853D2" stroke-width="4"/>
+    </svg>
+  </div>
+  <div class="fork-cols">
+    <div class="card fc"><div class="k amber">Track 1 · now through December</div><h3>The upgrade, already owned</h3><p>Program upgrade under Priya and LaRae. Feedback under the PM team. Small, flagged, measured. Product unblocks, reviews, and ships it with you.</p><div class="tags"><span>Nov 13: demo and feedback phase 1</span><span>Proof: one PM, doc to PR in four weeks</span></div></div>
+    <div class="card fc blue"><div class="k">Track 2 · 2027</div><h3>The redesign, researched before it's built</h3><p>The 11-star picture from Sep 23, worked back to a 6 or 7 we can scale. Students, support, partners, every one of you, before anything big gets built.</p><div class="tags"><span>I'm leading this from November</span><span>Ranked list shared here in December</span></div></div>
+  </div>
+  <div class="north">
+    <div class="card nstat"><div class="n">45<small>%</small></div><div class="t">Project 1 completion, the number both tracks serve<small>Rodolfo's Q4 goal. 50% is the stretch. A 30-day satisfaction score gets added so we can read it early.</small></div></div>
+    <div class="quote">"An upgrade, not a redesign. Product keeps exploring the redesign. We fix what students complain about most, now."<span>Rodolfo, Oct 9 sync with Ops, L&amp;D and PM</span></div>
+  </div>
+</section>
+
+<!-- 6 QUICK-FIX MENU -->
+<section class="slide">
+  <div class="eyebrow">Track 1 · the menu, in your own words</div>
+  <h2>Ten fixes you already wrote, sorted into the workstreams.</h2>
+  <div class="ws">
+    <div class="wsh p2"><span class="wsk">Program upgrade</span><span class="wso">Priya and LaRae · demo Nov 13</span></div>
+    <div class="card mi p2 c2"><div class="mic"><svg class="ic"><use href="#i-file"/></svg></div><h3>"Your Deliverable" block</h3><p>What you'll submit, a worked example, a 3-line rubric. Day one.</p><div class="avs" data-mode="stack" data-groups="Matt|Carlinda|Rachael|Minna=Matt's group;Christie|Max|Mike=Christie's group"></div></div>
+    <div class="card mi p2 c2"><div class="mic"><svg class="ic"><use href="#i-play"/></svg></div><h3>Tool walkthrough library</h3><p>Short videos for the tools every externship uses. Record once, reuse everywhere.</p><div class="avs" data-mode="stack" data-groups="Matt|Carlinda|Rachael|Minna=Matt's group"></div></div>
+    <div class="card mi p2 c2"><div class="mic"><svg class="ic"><use href="#i-search"/></svg></div><h3>Accuracy audit</h3><p>Instructions vs. the files students get. By hand now, automated at launch later.</p><div class="avs" data-mode="stack" data-groups="Matt|Carlinda|Rachael|Minna=Matt's group"></div></div>
+    <div class="card mi p2 c2"><div class="mic"><svg class="ic"><use href="#i-cal"/></svg></div><h3>Week one, three modules</h3><p>Cap the first week. Extra reading for anyone hungry for more.</p><div class="avs" data-mode="stack" data-groups="Scott|Begum|Jay=Oct 7"></div></div>
+    <div class="card mi p2 c2"><div class="mic"><svg class="ic"><use href="#i-film"/></svg></div><h3>Short video summaries</h3><p>Short internal summaries instead of long YouTube links. One externship, A/B tested.</p><div class="avs" data-mode="stack" data-groups="Bifei|Michael|Smita=Bifei's group"></div></div>
+    <div class="card mi p2 c2"><div class="mic"><svg class="ic"><use href="#i-video"/></svg></div><h3>Lead video on "good"</h3><p>60 seconds from the company lead on what good work looks like here.</p><div class="avs" data-mode="stack" data-groups="Christie|Max|Mike=Christie's group"></div></div>
+    <div class="wsh p3 half"><span class="wsk">Feedback</span><span class="wso">PM team · phase 1 Nov 13, phase 2 Dec 11</span></div>
+    <div class="wsh half"><span class="wsk">Product</span><span class="wso">Jay · behind flags, read with you</span></div>
+    <div class="card mi p3 c3"><div class="mic"><svg class="ic"><use href="#i-sliders"/></svg></div><h3>Pick your feedback</h3><p>Instant AI check, or a named human with a date. AI trims answers so one PM clears 200 in 30 minutes.</p><div class="avs" data-mode="stack" data-groups="Christie|Scott|Vinny U=Sep 23;Scott|Begum|Jay=Oct 7"></div></div>
+    <div class="card mi p3 c3"><div class="mic"><svg class="ic"><use href="#i-flag"/></svg></div><h3>Mid-project checkpoint</h3><p>Catch mistakes before the final submission.</p><div class="avs" data-mode="stack" data-groups="Matt|Carlinda|Rachael|Minna=Matt's group"></div></div>
+    <div class="card mi c3"><div class="mic"><svg class="ic"><use href="#i-buoy"/></svg></div><h3>Help on the stuck screen</h3><p>Top ten sticking points, a 90-second walkthrough at each.</p><div class="avs" data-mode="stack" data-groups="Christie|Scott|Vinny U=Sep 23"></div></div>
+    <div class="card mi c3"><div class="mic"><svg class="ic"><use href="#i-help"/></svg></div><h3>Checks that test understanding</h3><p>"Drop your Doc link" proves a step was done. Ask one question that checks the idea instead.</p><div class="avs" data-mode="stack" data-groups="Jay=Jay, Oct 7"></div></div>
+  </div>
+</section>
+
+<!-- 7 PROOF OF CONCEPT: THE STORY -->
+<section class="slide">
+  <div class="eyebrow">Proof of concept</div>
+  <h2>Christie took the "Ship it Yourself" challenge. Four weeks later there's a pull request.</h2>
+  <div class="poc-head">
+    <div class="card endcap doc"><div class="ib"><svg class="ic"><use href="#i-file"/></svg></div><div><b>A Google Doc</b><small>Flexible Cohort Transfer, a page and a half, Sep 16</small></div></div>
+    <div class="weeks"><div class="n">4 weeks</div><div class="l">from one-pager to pull request</div></div>
+    <div class="card endcap pr"><div class="ib"><svg class="ic"><use href="#i-pr"/></svg></div><div><b>PR #3168 cohort transfer</b><small>Front end up, back end merged to dev, Oct 12</small></div></div>
+  </div>
+  <div class="tl">
+    <div class="line"></div>
+    <div class="steps">
+      <div class="s done"><div class="d">Sep 16</div><div class="t">One-pager</div><div class="p">Approved the same afternoon with three changes and a step-by-step build path.</div></div>
+      <div class="s done"><div class="d">Sep 18 to 29</div><div class="t">The rule, from data</div><div class="p">Reached P1, day 30+, 21 days with no substep. Pfizer and Breaking Games, cleared with Scott.</div></div>
+      <div class="s done"><div class="d">Oct 5 to 6</div><div class="t">Contract and plan</div><div class="p">Endpoint contract and a front-end plan, three rounds of adversarial review before build.</div></div>
+      <div class="s done"><div class="d">Oct 10</div><div class="t">Back end built</div><div class="p">Eligibility and transfer endpoints, work carried across, every move logged.</div></div>
+      <div class="s done"><div class="d">Oct 12</div><div class="t">PR up, dev merged</div><div class="p">Mateus deploying this week. The pilot switch is a config edit, not a release.</div></div>
+      <div class="s next"><div class="d">By Oct 26</div><div class="t">Live for Pfizer 666</div><div class="p">The first eligible externs get a destination the day the next cohort posts.</div></div>
+    </div>
+  </div>
+  <p class="punch frag">The clock was <span class="hl">review time, not build time.</span> That's the point.</p>
+</section>
+
+<!-- 8 PROOF OF CONCEPT: THE FEATURE -->
+<section class="slide">
+  <div class="eyebrow">Proof of concept · what it does</div>
+  <h2>Move forward without starting over.</h2>
+  <div class="stats">
+    <div class="card stat"><div class="n bad">~790<small>/ month</small></div><div class="l">Reach Project 1, then cancel</div><div class="d">Across Christie's programs</div></div>
+    <div class="card stat"><div class="n bad">4,575</div><div class="l">Canceled after real P1 work</div><div class="d">Her 10 programs, to date</div></div>
+    <div class="card stat"><div class="n amber">24<small>%</small></div><div class="l">Ever came back</div><div class="d">Re-enrolled on their own</div></div>
+    <div class="card stat"><div class="n">~8<small>%</small></div><div class="l">Already move cohorts by hand</div><div class="d">Through her inbox, losing their work</div></div>
+  </div>
+  <div class="split" style="align-items:start">
+    <div class="mock">
+      <div class="lbl">The card, in the externship</div>
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="crumb">Pfizer · Cohort 666 · you've been quiet for 3 weeks</div>
+      <h4>Pick up where you left off, in the next cohort</h4>
+      <p class="body">Move to the cohort starting Nov 9. Your submitted work, meetings and certificate eligibility come with you. Nothing to redo.</p>
+      <div class="btns"><span class="btn amber"><svg class="ic"><use href="#i-arrow"/></svg> Move my cohort</span><span class="btn ghost">Stay here</span></div>
+    </div>
+    <div>
+      <div class="k green">Who built what</div>
+      <div class="people">
+        <div class="pp"><div class="av amber">C</div><div><b>Christie</b> <span>spec, eligibility rule, front end, flag, emails, instrumentation</span></div></div>
+        <div class="pp"><div class="av">J</div><div><b>Jay</b> <span>back end</span></div></div>
+        <div class="pp"><div class="av navy">M</div><div><b>Michael</b> <span>review</span></div></div>
+        <div class="pp"><div class="av green">M</div><div><b>Mateus</b> <span>deploy</span></div></div>
+        <div class="pp"><div class="av red">S</div><div><b>Scott</b> <span>program sign-off</span></div></div>
+      </div>
+      <p class="sub" style="font-size:clamp(13px,1.2vw,17px);margin-top:1.6vh;font-style:italic">"I have fallen behind by about 3 to 4 assignments. Would it be possible to move to a later cohort so I can fully engage without being behind? I remain very interested in completing the program."</p>
+      <p class="src">Measured on paid retention among started-but-stalled externs, then completion. Same tools you already have: a Google Doc, the tracker, Claude Code, the playbook.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 THE OFFER -->
+<section class="slide">
+  <div class="eyebrow">Track 1 · how anyone on this call does the same</div>
+  <h2>The offer from the Sep 2 walkthrough stands. Here's the loop.</h2>
+  <div class="loop">
+    <svg viewBox="0 0 1200 262" aria-hidden="true">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4A4F66"/></marker></defs>
+      <path d="M150 140 C 150 236, 1050 236, 1050 140" stroke="#D9D1C4" stroke-width="5" fill="none" stroke-dasharray="12 10"/>
+      <text x="600" y="250" font-family="Manrope, sans-serif" font-weight="800" font-size="16" fill="#4A4F66" text-anchor="middle">read it together, then the next one-pager</text>
+      <line x1="225" y1="105" x2="440" y2="105" stroke="#4A4F66" stroke-width="5" marker-end="url(#ah)"/>
+      <line x1="525" y1="105" x2="740" y2="105" stroke="#4A4F66" stroke-width="5" marker-end="url(#ah)"/>
+      <line x1="825" y1="105" x2="1040" y2="105" stroke="#4A4F66" stroke-width="5" marker-end="url(#ah)"/>
+      <g><circle cx="150" cy="105" r="60" fill="#FFFFFF" stroke="#2853D2" stroke-width="6"/><text x="150" y="113" font-family="Manrope, sans-serif" font-weight="800" font-size="26" fill="#2853D2" text-anchor="middle">1</text></g>
+      <g><circle cx="450" cy="105" r="60" fill="#FFFFFF" stroke="#2853D2" stroke-width="6"/><text x="450" y="113" font-family="Manrope, sans-serif" font-weight="800" font-size="26" fill="#2853D2" text-anchor="middle">2</text></g>
+      <g><circle cx="750" cy="105" r="60" fill="#FFFFFF" stroke="#2853D2" stroke-width="6"/><text x="750" y="113" font-family="Manrope, sans-serif" font-weight="800" font-size="26" fill="#2853D2" text-anchor="middle">3</text></g>
+      <g><circle cx="1050" cy="105" r="60" fill="#E8A33D" stroke="#E8A33D" stroke-width="6"/><text x="1050" y="113" font-family="Manrope, sans-serif" font-weight="800" font-size="26" fill="#1B1F33" text-anchor="middle">4</text></g>
+      <text x="150" y="26" font-family="Manrope, sans-serif" font-weight="800" font-size="15" fill="#4A4F66" text-anchor="middle" letter-spacing="2">YOU</text>
+      <text x="450" y="26" font-family="Manrope, sans-serif" font-weight="800" font-size="15" fill="#4A4F66" text-anchor="middle" letter-spacing="2">YOU + ME</text>
+      <text x="750" y="26" font-family="Manrope, sans-serif" font-weight="800" font-size="15" fill="#4A4F66" text-anchor="middle" letter-spacing="2">YOU + CLAUDE CODE</text>
+      <text x="1050" y="26" font-family="Manrope, sans-serif" font-weight="800" font-size="15" fill="#9A6A15" text-anchor="middle" letter-spacing="2">ME + ENG</text>
+    </svg>
+  </div>
+  <div class="loop-steps">
+    <div class="ls"><h3>One-pager</h3><p>What, why, who, how we'll know. A Google Doc is enough. Christie's was a page and a half. I reply within a day.</p></div>
+    <div class="ls"><h3>Tracker row</h3><p>One flag, one metric, one population. No overlap with running tests; check with Carlinda and L&amp;D.</p></div>
+    <div class="ls"><h3>Plan, then build</h3><p>The playbook attacks the plan until it scores 9 of 10. Then build to dev, matching the app's existing components.</p></div>
+    <div class="ls"><h3>We ship it</h3><p>I take the back end and the flag. Michael and Felipe review. Live behind a flag, read together.</p></div>
+  </div>
+  <p class="punch frag">You bring the problem you see every day. <span class="hl">We handle the parts that used to need an engineer.</span></p>
+</section>
+
+<!-- 10 OWNERSHIP -->
+<section class="slide">
+  <div class="eyebrow">Who owns what from November</div>
+  <h2>Dedicated product on the end-to-end experience.</h2>
+  <div class="own">
+    <div class="card o amber"><div class="av">D</div><div><div class="name">Dishita</div><div class="role">Funnel and growth marketing</div><p>Owns the funnel end to end: homepage, sign-up, recommendations, renewals, creators, paid landing pages.</p></div></div>
+    <div class="card o blue"><div class="av">J</div><div><div class="name">Jay</div><div class="role">Core product experience</div><p>Funnel through October, a short overlap, then a clean cutover to the externship experience. Track 1 support, Track 2 research.</p></div></div>
+    <div class="card o green"><div class="av">R</div><div><div class="name">Rodolfo</div><div class="role">Paid ads, then feedback</div><p>Paid ads and attribution until Nov 6, then evals-based feedback with the PM team, program by program, from Dec 11.</p></div></div>
+  </div>
+  <div class="months-wrap"><div class="months">
+    <div class="mk blue" style="left:27%"><span>Jay cuts over · late Oct</span><em></em><i></i></div>
+    <div class="mk amber hi" style="left:35%"><span>WGU pilot · Nov 2</span><em></em><i></i></div>
+    <div class="mk green hi2" style="left:41%"><span>Rodolfo switches · Nov 6</span><em></em><i></i></div>
+    <div class="mk amber" style="left:47%"><span>Demo + feedback phase 1 · Nov 13</span><em></em><i></i></div>
+    <div class="mk green hi" style="left:77%"><span>Feedback phase 2 · Dec 11</span><em></em><i></i></div>
+    <div class="mk blue" style="left:90%"><span>Ranked 2027 list · Dec</span><em></em><i></i></div>
+    <div class="axis"><div>October</div><div>November</div><div>December</div></div>
+  </div></div>
+  <p class="punch frag">Matt's line: <span class="hl">first-term quality is the sales strategy.</span> Product should be on it full time.</p>
+</section>
+
+<!-- 11 TRACK 2 -->
+<section class="slide">
+  <div class="eyebrow">Track 2 · 2027</div>
+  <h2>Research first. Then prioritize in the open. Then build.</h2>
+  <div class="gantt">
+    <div></div>
+    <div class="hd"><div>November</div><div>December</div><div>January</div><div>February on</div></div>
+    <div class="lbl"><h3>Listen</h3><small>Roadshow: 30 min with every PM, L&amp;D, partnerships, support, growth</small></div>
+    <div class="track"><div class="bar" style="grid-column:1/3">What would you fix first?</div></div>
+    <div class="lbl"><h3>Dig</h3><small>Due diligence</small></div>
+    <div class="track"><div class="bar" style="grid-column:1/4">Interviews, tickets, the explorer, partner NPS</div></div>
+    <div class="lbl"><h3>Rank</h3><small>Shared back on this call</small></div>
+    <div class="track"><div class="bar green" style="grid-column:3/5">Sized against completion and renewal</div></div>
+    <div class="lbl"><h3>Build</h3><small>Scoped bets, behind flags</small></div>
+    <div class="track"><div class="bar amber" style="grid-column:5/9">The redesign, from the research. Measured like everything else.</div></div>
+  </div>
+  <div class="hyp"><div class="hk">What I'm carrying into the research · my Oct 7 notes with Scott and Begum</div><div class="chips">
+    <span><svg class="ic"><use href="#i-sliders"/></svg> Optionality as the principle: choose how you take it in, choose how you get feedback</span>
+    <span><svg class="ic"><use href="#i-headphones"/></svg> Work on the go: laptop, then phone, then audio in the car</span>
+    <span><svg class="ic"><use href="#i-award"/></svg> Duolingo-style mechanics on the phone, not dense text</span>
+    <span><svg class="ic"><use href="#i-film"/></svg> Choose-your-own-adventure video with deep links</span>
+    <span><svg class="ic"><use href="#i-mic"/></svg> A conversational voice experience, benchmark ChatGPT voice</span>
+    <span><svg class="ic"><use href="#i-bag"/></svg> Buy, don't build: vendor widgets, cheaper models, usage caps</span>
+  </div></div>
+  <p class="src">The big ideas from Sep 23 live here too: meet-your-manager onboarding, a community inside the portal, recruiter access, personalized paths. Not forgotten, just sequenced.</p>
+</section>
+
+<!-- 12 ASKS -->
+<section class="slide dark">
+  <div class="eyebrow">What I need from you</div>
+  <h2>Three asks.</h2>
+  <div class="asks">
+    <div class="card ask"><div class="big">1</div><div class="num">Ask 1</div><h3>Pick a quick fix and own it</h3><p>Any item from the menu, or your own. One-pager to me by the end of next week. Christie's is the template.</p></div>
+    <div class="card ask"><div class="big">2</div><div class="num">Ask 2</div><h3>Bring it to its workstream</h3><p>Content and format go to Priya and LaRae. Feedback goes to the PM team. Product fixes come to me. The Oct 7 sheet is still the source, so finish your row.</p></div>
+    <div class="card ask"><div class="big">3</div><div class="num">Ask 3</div><h3>Say yes to the roadshow</h3><p>I'll put 30 minutes on your calendar in the next two weeks. Bring the thing you'd fix first and the thing students say that the data misses.</p></div>
+  </div>
+  <p class="punch frag" style="color:var(--navy-ink)">If there's appetite, <span class="hl">15 more minutes in the same groups</span> to pick a fix and name an owner. Your call.</p>
+</section>
+
+<!-- 13 CLOSE -->
+<section class="slide dark centered">
+  <div class="eyebrow">One question</div>
+  <h1>From your seat, which fix would you own?</h1>
+  <p class="sub">Put it in the chat or the sheet. Priya, over to you.</p>
+  <div class="stars" style="margin-top:4vh">
+    <svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic on"><use href="#i-star"/></svg><svg class="ic" style="stroke:#3A3F5E"><use href="#i-star"/></svg><svg class="ic" style="stroke:#3A3F5E"><use href="#i-star"/></svg><svg class="ic" style="stroke:#3A3F5E"><use href="#i-star"/></svg><svg class="ic" style="stroke:#3A3F5E"><use href="#i-star"/></svg>
+  </div>
+</section>
+
+<script>
+(function(){
+  var colors={Christie:'#E8A33D',Jay:'#2853D2',Scott:'#C4472F',Michael:'#141830',Mateus:'#2E9E6B','Vinny U':'#1A8FA8',Smita:'#7B4FD1',Rachael:'#D1548F',Priya:'#5B6B2E',LaRae:'#B5651D',Matt:'#3B3F8C',Carlinda:'#2E9E6B',Minna:'#8C5A2E',Max:'#1F7A8C',Mike:'#6B4FD1',Monika:'#A33D6E',Bifei:'#2E6B9E',Begum:'#C47A2F'};
+  var dark={Christie:1,Begum:1};
+  function circ(n){ var c=colors[n]||'#4A4F66', ini=n.split(' ').map(function(w){return w[0];}).join('').slice(0,2); return '<i style="background:'+c+(dark[n]?';color:#1B1F33':'')+'" title="'+n+'">'+ini+'</i>'; }
+  document.querySelectorAll('.avs').forEach(function(el){
+    if(el.getAttribute('data-mode')==='stack'){
+      el.innerHTML=(el.getAttribute('data-groups')||'').split(';').map(function(g){
+        var kv=g.split('='); return '<span class="gp"><span class="stack">'+kv[0].split('|').map(circ).join('')+'</span>'+(kv[1]||'')+'</span>';
+      }).join(''); return;
+    }
+    var html=(el.getAttribute('data-people')||'').split('|').filter(Boolean).map(function(n){
+      var c=colors[n]||'#4A4F66', ini=n.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
+      return '<span class="av"><i style="background:'+c+(dark[n]?';color:#1B1F33':'')+'">'+ini+'</i>'+n+'</span>';
+    }).join('');
+    var t=el.getAttribute('data-tag'); if(t) html+='<span class="tag">'+t+'</span>';
+    el.innerHTML=html;
+  });
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  var progress = document.getElementById('progress');
+  var counter = document.getElementById('counter');
+  function frags(s){ return Array.prototype.slice.call(s.querySelectorAll('.frag')); }
+  function paint(){
+    slides.forEach(function(s,idx){ s.classList.toggle('active', idx===i); });
+    progress.style.width = ((i+1)/slides.length*100) + '%';
+    counter.textContent = (i+1) + ' / ' + slides.length;
+    location.hash = String(i+1);
+  }
+  function next(){
+    var pending = frags(slides[i]).filter(function(f){ return !f.classList.contains('on'); });
+    if(pending.length){ pending[0].classList.add('on'); return; }
+    if(i < slides.length-1){ i++; paint(); }
+  }
+  function prev(){
+    var shown = frags(slides[i]).filter(function(f){ return f.classList.contains('on'); });
+    if(shown.length){ shown[shown.length-1].classList.remove('on'); return; }
+    if(i > 0){ i--; paint(); }
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter'){ e.preventDefault(); next(); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key === 'Home'){ i = 0; paint(); }
+    else if(e.key === 'End'){ i = slides.length-1; paint(); }
+    else if(e.key.toLowerCase() === 'f'){
+      if(document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+  });
+  document.addEventListener('click', function(e){ if(e.target.closest('a')) return; next(); });
+  var h = parseInt((location.hash||'').replace('#',''),10);
+  if(h && h>=1 && h<=slides.length){ i = h-1; }
+  paint();
+})();
+</script>
+</body>
+</html>
